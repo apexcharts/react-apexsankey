@@ -143,12 +143,12 @@ function App() {
 
 ## Props
 
-| Prop        | Type                    | Required | Description                                |
-| ----------- | ----------------------- | -------- | ------------------------------------------ |
-| `data`      | `GraphData`             | Yes      | Sankey diagram data (nodes and edges)      |
-| `options`   | `Partial<SankeyOptions>`| No       | Configuration options for the diagram      |
-| `className` | `string`                | No       | CSS class name for the container element   |
-| `style`     | `CSSProperties`         | No       | Inline styles for the container element    |
+| Prop        | Type                     | Required | Description                              |
+| ----------- | ------------------------ | -------- | ---------------------------------------- |
+| `data`      | `GraphData`              | Yes      | Sankey diagram data (nodes and edges)    |
+| `options`   | `Partial<SankeyOptions>` | No       | Configuration options for the diagram    |
+| `className` | `string`                 | No       | CSS class name for the container element |
+| `style`     | `CSSProperties`          | No       | Inline styles for the container element  |
 
 ## Data Format
 
@@ -156,9 +156,9 @@ function App() {
 
 ```typescript
 interface Node {
-  id: string;      // unique identifier
-  title: string;   // display label
-  color?: string;  // optional custom color
+  id: string; // unique identifier
+  title: string; // display label
+  color?: string; // optional custom color
 }
 ```
 
@@ -166,11 +166,11 @@ interface Node {
 
 ```typescript
 interface Edge {
-  source: string;  // source node id
-  target: string;  // target node id
-  value: number;   // edge weight/size
-  type?: string;   // optional grouping type
-  color?: string;  // optional custom color
+  source: string; // source node id
+  target: string; // target node id
+  value: number; // edge weight/size
+  type?: string; // optional grouping type
+  color?: string; // optional custom color
 }
 ```
 
@@ -181,36 +181,36 @@ interface GraphData {
   nodes: Node[];
   edges: Edge[];
   options?: {
-    order?: string[][][];      // custom node ordering
-    alignLinkTypes?: boolean;  // align links by type
+    order?: string[][][]; // custom node ordering
+    alignLinkTypes?: boolean; // align links by type
   };
 }
 ```
 
 ## Options
 
-| Option             | Type                          | Default                      | Description                                        |
-| ------------------ | ----------------------------- | ---------------------------- | -------------------------------------------------- |
-| `width`            | `number \| string`            | `800`                        | Width of graph container                           |
-| `height`           | `number \| string`            | `800`                        | Height of graph container                          |
-| `canvasStyle`      | `string`                      | `""`                         | CSS styles for canvas root container               |
-| `spacing`          | `number`                      | `100`                        | Spacing from top and left of graph container       |
-| `nodeWidth`        | `number`                      | `20`                         | Width of graph nodes                               |
-| `nodeBorderWidth`  | `number`                      | `1`                          | Border width of nodes in pixels                    |
-| `nodeBorderColor`  | `string`                      | `""`                         | Border color of nodes                              |
-| `onNodeClick`      | `(node: Node) => void`        | `undefined`                  | Callback function for node click                   |
-| `edgeOpacity`      | `number`                      | `0.4`                        | Opacity value for edges (0 to 1)                   |
-| `edgeGradientFill` | `boolean`                     | `true`                       | Enable gradient fill based on node colors          |
-| `enableTooltip`    | `boolean`                     | `false`                      | Enable tooltip on hover                            |
-| `enableToolbar`    | `boolean`                     | `false`                      | Enable/disable graph toolbar                       |
-| `tooltipId`        | `string`                      | `"sankey-tooltip-container"` | Tooltip HTML element id                            |
-| `tooltipTemplate`  | `(content) => string`         | default template             | HTML template for tooltip                          |
-| `tooltipBorderColor` | `string`                    | `"#BCBCBC"`                  | Border color of tooltip                            |
-| `tooltipBGColor`   | `string`                      | `"#FFFFFF"`                  | Background color of tooltip                        |
-| `fontSize`         | `string`                      | `"14px"`                     | Font size of node labels                           |
-| `fontFamily`       | `string`                      | `""`                         | Font family of node labels                         |
-| `fontWeight`       | `string`                      | `"400"`                      | Font weight of node labels                         |
-| `fontColor`        | `string`                      | `"#000000"`                  | Font color of node labels                          |
+| Option               | Type                   | Default                      | Description                                  |
+| -------------------- | ---------------------- | ---------------------------- | -------------------------------------------- |
+| `width`              | `number \| string`     | `800`                        | Width of graph container                     |
+| `height`             | `number \| string`     | `800`                        | Height of graph container                    |
+| `canvasStyle`        | `string`               | `""`                         | CSS styles for canvas root container         |
+| `spacing`            | `number`               | `100`                        | Spacing from top and left of graph container |
+| `nodeWidth`          | `number`               | `20`                         | Width of graph nodes                         |
+| `nodeBorderWidth`    | `number`               | `1`                          | Border width of nodes in pixels              |
+| `nodeBorderColor`    | `string`               | `""`                         | Border color of nodes                        |
+| `onNodeClick`        | `(node: Node) => void` | `undefined`                  | Callback function for node click             |
+| `edgeOpacity`        | `number`               | `0.4`                        | Opacity value for edges (0 to 1)             |
+| `edgeGradientFill`   | `boolean`              | `true`                       | Enable gradient fill based on node colors    |
+| `enableTooltip`      | `boolean`              | `false`                      | Enable tooltip on hover                      |
+| `enableToolbar`      | `boolean`              | `false`                      | Enable/disable graph toolbar                 |
+| `tooltipId`          | `string`               | `"sankey-tooltip-container"` | Tooltip HTML element id                      |
+| `tooltipTemplate`    | `(content) => string`  | default template             | HTML template for tooltip                    |
+| `tooltipBorderColor` | `string`               | `"#BCBCBC"`                  | Border color of tooltip                      |
+| `tooltipBGColor`     | `string`               | `"#FFFFFF"`                  | Background color of tooltip                  |
+| `fontSize`           | `string`               | `"14px"`                     | Font size of node labels                     |
+| `fontFamily`         | `string`               | `""`                         | Font family of node labels                   |
+| `fontWeight`         | `string`               | `"400"`                      | Font weight of node labels                   |
+| `fontColor`          | `string`               | `"#000000"`                  | Font color of node labels                    |
 
 ## Custom Node Ordering
 
@@ -230,7 +230,7 @@ const data = {
   options: {
     order: [
       [["a", "b"]], // first layer
-      [["c"]],      // second layer
+      [["c"]], // second layer
     ],
   },
 };
@@ -296,11 +296,6 @@ This component is SSR-safe and renders an empty container on the server. The cha
 - React 17+
 - Modern browsers (Chrome, Firefox, Safari, Edge)
 
-## License
-
-MIT
-
 ## Links
 
-- [ApexSankey Documentation](https://apexcharts.com/docs/sankey)
 - [ApexSankey GitHub](https://github.com/nicnash/apexsankey)
