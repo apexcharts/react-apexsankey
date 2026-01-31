@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@svgdotjs/svg.js": "^3.2.4",
-    "apexsankey": "^1.2.5",
+    "apexsankey": "^1.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-apexsankey": "file:.."
