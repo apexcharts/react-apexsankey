@@ -1,63 +1,19 @@
 # react-apexsankey
 
-React wrapper for [ApexSankey](https://github.com/apexcharts/apexsankey) - A JavaScript library to create Sankey diagrams.
+React wrapper for [ApexSankey](https://github.com/apexcharts/apexsankey) — a JavaScript library for creating Sankey diagrams.
 
 ## Installation
 
 ```bash
-npm install react-apexsankey apexsankey @svgdotjs/svg.js
+npm install react-apexsankey apexsankey
 ```
 
-Or with yarn:
+> **Note:** `apexsankey` is a peer dependency and must be installed alongside `react-apexsankey`.
 
-```bash
-yarn add react-apexsankey apexsankey @svgdotjs/svg.js
-```
-
-## Loading ApexSankey
-
-**Important:** You must load ApexSankey before using the React component. Choose one of the following methods:
-
-### Option 1: ES Module Import (Recommended)
-
-Import ApexSankey at your app's entry point to register it globally:
+## Basic Usage
 
 ```tsx
-// main.tsx or index.tsx
-import "apexsankey";
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
-```
-
-### Option 2: CDN Script Tags
-
-Add the scripts to your `index.html` before your app bundle:
-
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/apexsankey/apexsankey.min.js"></script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
-```
-
-## Quick Start
-
-```tsx
-import ApexSankey from "react-apexsankey";
+import { ApexSankey } from "react-apexsankey";
 
 const data = {
   nodes: [
@@ -68,10 +24,10 @@ const data = {
     { id: "energy", title: "Energy" },
   ],
   edges: [
-    { source: "oil", target: "fossil", value: 15 },
-    { source: "gas", target: "fossil", value: 20 },
-    { source: "coal", target: "fossil", value: 25 },
-    { source: "fossil", target: "energy", value: 60 },
+    { source: "oil", target: "fossil", value: 15, type: "flow" },
+    { source: "gas", target: "fossil", value: 20, type: "flow" },
+    { source: "coal", target: "fossil", value: 25, type: "flow" },
+    { source: "fossil", target: "energy", value: 60, type: "flow" },
   ],
 };
 
@@ -81,7 +37,7 @@ function App() {
       data={data}
       options={{
         width: 800,
-        height: 600,
+        height: 500,
         nodeWidth: 20,
       }}
     />
@@ -96,27 +52,7 @@ If you have a commercial license, set it once at app initialization before rende
 ```tsx
 import { setApexSankeyLicense } from "react-apexsankey";
 
-// call this at the top of your app
 setApexSankeyLicense("your-license-key-here");
-```
-
-Example with React app entry point:
-
-```tsx
-// main.tsx or index.tsx
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { setApexSankeyLicense } from "react-apexsankey";
-import App from "./App";
-
-// set license before rendering
-setApexSankeyLicense("your-license-key-here");
-
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
 ```
 
 ## Using Refs
@@ -125,14 +61,13 @@ Access the underlying `SankeyGraph` instance via refs:
 
 ```tsx
 import { useRef, useEffect } from "react";
-import ApexSankey, { ApexSankeyRef } from "react-apexsankey";
+import { ApexSankey, ApexSankeyRef } from "react-apexsankey";
 
 function App() {
   const chartRef = useRef<ApexSankeyRef>(null);
 
   useEffect(() => {
     if (chartRef.current?.graph) {
-      console.log("Graph instance:", chartRef.current.graph);
       console.log("Max rank:", chartRef.current.graph.maxRank);
     }
   }, []);
@@ -143,147 +78,141 @@ function App() {
 
 ## Props
 
-| Prop        | Type                     | Required | Description                              |
-| ----------- | ------------------------ | -------- | ---------------------------------------- |
-| `data`      | `GraphData`              | Yes      | Sankey diagram data (nodes and edges)    |
-| `options`   | `Partial<SankeyOptions>` | No       | Configuration options for the diagram    |
-| `className` | `string`                 | No       | CSS class name for the container element |
-| `style`     | `CSSProperties`          | No       | Inline styles for the container element  |
+| Prop        | Type                     | Default      | Description                           |
+| ----------- | ------------------------ | ------------ | ------------------------------------- |
+| `data`      | `GraphData`              | **required** | Sankey data (nodes and edges)         |
+| `options`   | `Partial<SankeyOptions>` | -            | Sankey configuration (see below)      |
+| `className` | `string`                 | -            | CSS class for the container           |
+| `style`     | `CSSProperties`          | -            | Inline styles for the container       |
 
-## Data Format
+### SankeyOptions
 
-### Nodes
+All Sankey configuration is passed through the `options` prop. `SankeyOptions` is an intersection of the sub-interfaces below — pass a partial; any omitted field falls back to its default.
 
-```typescript
-interface Node {
-  id: string; // unique identifier
-  title: string; // display label
-  color?: string; // optional custom color
-}
-```
+#### Canvas & layout
 
-### Edges
+| Option           | Type               | Default  | Description                                                         |
+| ---------------- | ------------------ | -------- | ------------------------------------------------------------------- |
+| `width`          | `number \| string` | `'100%'` | Canvas width (pixel number or CSS percentage)                       |
+| `height`         | `number \| string` | `'auto'` | Canvas height. `'auto'` derives from width at 1.6:1                 |
+| `spacing`        | `number`           | `20`     | Horizontal spacing between node columns in pixels                   |
+| `viewPortWidth`  | `number`           | `800`    | Internal SVG viewport width                                         |
+| `viewPortHeight` | `number`           | `500`    | Internal SVG viewport height                                        |
+| `whitespace`     | `number`           | `0.18`   | Fraction of vertical space used as margins between nodes (0–1)      |
+| `canvasStyle`    | `string`           | `''`     | Arbitrary CSS injected onto the SVG root container                  |
+| `enableToolbar`  | `boolean`          | `true`   | Show the zoom/pan/export toolbar                                    |
 
-```typescript
-interface Edge {
-  source: string; // source node id
-  target: string; // target node id
-  value: number; // edge weight/size
-  type?: string; // optional grouping type
-  color?: string; // optional custom color
-}
-```
+#### Nodes
 
-### Complete Data Structure
+| Option            | Type                              | Default | Description                                                |
+| ----------------- | --------------------------------- | ------- | ---------------------------------------------------------- |
+| `nodeWidth`       | `number`                          | `20`    | Width of each node rectangle in pixels                     |
+| `nodeBorderWidth` | `number`                          | `1`     | Border width of each node in pixels                        |
+| `nodeBorderColor` | `string \| null`                  | `null`  | Node border color                                          |
+| `onNodeClick`     | `(node: SankeyNode) => void`      | -       | Callback fired when a node is clicked                      |
 
-```typescript
+#### Edges
+
+| Option             | Type      | Default | Description                                                     |
+| ------------------ | --------- | ------- | --------------------------------------------------------------- |
+| `edgeOpacity`      | `number`  | `0.4`   | Opacity of edges (0–1)                                          |
+| `edgeGradientFill` | `boolean` | `true`  | Fill edges with a gradient between source and target colors    |
+| `edgeGap`          | `number`  | `2`     | Gap in pixels between adjacent edges at their connection points |
+
+#### Font
+
+| Option       | Type     | Default     | Description                      |
+| ------------ | -------- | ----------- | -------------------------------- |
+| `fontSize`   | `string` | `'14px'`    | CSS font-size for node labels    |
+| `fontFamily` | `string` | `''`        | CSS font-family for node labels  |
+| `fontWeight` | `string` | `'400'`     | CSS font-weight for node labels  |
+| `fontColor`  | `string` | `'#212121'` | CSS color for node labels        |
+
+#### Tooltip
+
+| Option                | Type                                              | Default                            | Description                                          |
+| --------------------- | ------------------------------------------------- | ---------------------------------- | ---------------------------------------------------- |
+| `enableTooltip`       | `boolean`                                         | `true`                             | Show edge tooltips on hover                          |
+| `tooltipTheme`        | `'light' \| 'dark'`                               | -                                  | Shortcut for dark/light color presets                |
+| `tooltipBGColor`      | `string`                                          | `'#FFFFFF'`                        | Tooltip background color                             |
+| `tooltipBorderColor`  | `string`                                          | `'#E2E8F0'`                        | Tooltip border color                                 |
+| `tooltipFontColor`    | `string`                                          | `'#1a1a1a'`                        | Tooltip font color                                   |
+| `tooltipId`           | `string`                                          | `'apexsankey-tooltip-container'`   | HTML `id` for the tooltip container                  |
+| `tooltipTemplate`     | `(content: TooltipContent) => string`             | -                                  | Custom edge (source→target) tooltip HTML             |
+| `nodeTooltipTemplate` | `(content: NodeTooltipContent) => string`         | -                                  | Custom per-node tooltip HTML                         |
+
+#### Interaction & animation
+
+| Option                   | Type      | Default | Description                                                     |
+| ------------------------ | --------- | ------- | --------------------------------------------------------------- |
+| `highlightConnectedPath` | `boolean` | `true`  | Highlight the connected flow path on hover                      |
+| `dimOpacity`             | `number`  | `0.15`  | Opacity for dimmed (unrelated) elements during highlighting     |
+| `animation.enabled`      | `boolean` | `true`  | Play entrance animation (disabled if `prefers-reduced-motion`)  |
+| `animation.duration`     | `number`  | `800`   | Entrance animation duration in ms                               |
+
+#### Accessibility
+
+| Option               | Type      | Default | Description                                                  |
+| -------------------- | --------- | ------- | ------------------------------------------------------------ |
+| `a11y.enabled`       | `boolean` | `true`  | Enable WCAG 2.1 AA accessibility features                    |
+| `a11y.diagramLabel`  | `string`  | -       | Override the auto-generated aria-label on the SVG root       |
+| `a11y.description`   | `string`  | -       | Populates the `<desc>` element for a longer description      |
+
+## Data Structure
+
+```ts
 interface GraphData {
-  nodes: Node[];
-  edges: Edge[];
-  options?: {
-    order?: string[][][]; // custom node ordering
-    alignLinkTypes?: boolean; // align links by type
-  };
+  nodes: SankeyGraphNode[];
+  edges: SankeyGraphEdge[];
 }
-```
 
-## Options
+interface SankeyGraphNode {
+  id: string;       // unique identifier
+  title: string;    // display label
+  color?: string;   // override auto-assigned palette color
+}
 
-| Option               | Type                   | Default                      | Description                                  |
-| -------------------- | ---------------------- | ---------------------------- | -------------------------------------------- |
-| `width`              | `number \| string`     | `800`                        | Width of graph container                     |
-| `height`             | `number \| string`     | `800`                        | Height of graph container                    |
-| `canvasStyle`        | `string`               | `""`                         | CSS styles for canvas root container         |
-| `spacing`            | `number`               | `100`                        | Spacing from top and left of graph container |
-| `nodeWidth`          | `number`               | `20`                         | Width of graph nodes                         |
-| `nodeBorderWidth`    | `number`               | `1`                          | Border width of nodes in pixels              |
-| `nodeBorderColor`    | `string`               | `""`                         | Border color of nodes                        |
-| `onNodeClick`        | `(node: Node) => void` | `undefined`                  | Callback function for node click             |
-| `edgeOpacity`        | `number`               | `0.4`                        | Opacity value for edges (0 to 1)             |
-| `edgeGradientFill`   | `boolean`              | `true`                       | Enable gradient fill based on node colors    |
-| `enableTooltip`      | `boolean`              | `false`                      | Enable tooltip on hover                      |
-| `enableToolbar`      | `boolean`              | `false`                      | Enable/disable graph toolbar                 |
-| `tooltipId`          | `string`               | `"sankey-tooltip-container"` | Tooltip HTML element id                      |
-| `tooltipTemplate`    | `(content) => string`  | default template             | HTML template for tooltip                    |
-| `tooltipBorderColor` | `string`               | `"#BCBCBC"`                  | Border color of tooltip                      |
-| `tooltipBGColor`     | `string`               | `"#FFFFFF"`                  | Background color of tooltip                  |
-| `fontSize`           | `string`               | `"14px"`                     | Font size of node labels                     |
-| `fontFamily`         | `string`               | `""`                         | Font family of node labels                   |
-| `fontWeight`         | `string`               | `"400"`                      | Font weight of node labels                   |
-| `fontColor`          | `string`               | `"#000000"`                  | Font color of node labels                    |
-
-## Custom Node Ordering
-
-You can specify custom node ordering using the `order` option in data:
-
-```tsx
-const data = {
-  nodes: [
-    { id: "a", title: "A" },
-    { id: "b", title: "B" },
-    { id: "c", title: "C" },
-  ],
-  edges: [
-    { source: "a", target: "c", value: 1 },
-    { source: "b", target: "c", value: 2 },
-  ],
-  options: {
-    order: [
-      [["a", "b"]], // first layer
-      [["c"]], // second layer
-    ],
-  },
-};
+interface SankeyGraphEdge {
+  source: string;   // id of upstream node
+  target: string;   // id of downstream node
+  value: number;    // flow value — determines edge band width
+  type: string;     // category label (used for grouping and tooltip)
+}
 ```
 
 ## Custom Tooltip
 
 ```tsx
-const options = {
-  enableTooltip: true,
-  tooltipTemplate: ({ source, target, value }) => `
-    <div style="padding: 8px;">
-      <strong>${source.title}</strong> → <strong>${target.title}</strong>
-      <br />
-      Value: ${value}
-    </div>
-  `,
-};
-```
-
-## Styling
-
-### Container Styling
-
-```tsx
 <ApexSankey
   data={data}
-  className="my-sankey-chart"
-  style={{ border: "1px solid #ccc", borderRadius: 8 }}
-  options={options}
+  options={{
+    enableTooltip: true,
+    tooltipTemplate: ({ source, target, value }) => `
+      <div style="padding: 8px;">
+        <strong>${source?.title}</strong> → <strong>${target?.title}</strong>
+        <br />
+        Value: ${value}
+      </div>
+    `,
+  }}
 />
 ```
 
-### Canvas Styling
+## TypeScript Support
 
-```tsx
-const options = {
-  canvasStyle: "background: #f6f6f6; border: 1px solid #caced0;",
-};
-```
+Full TypeScript support with exported types:
 
-## TypeScript
-
-All types are exported for use in your TypeScript projects:
-
-```tsx
-import ApexSankey, {
-  GraphData,
-  Node,
-  Edge,
-  SankeyOptions,
-  ApexSankeyRef,
+```ts
+import type {
   ApexSankeyProps,
+  ApexSankeyRef,
+  GraphData,
+  SankeyGraphNode,
+  SankeyGraphEdge,
+  SankeyOptions,
+  SankeyNode,
+  TooltipContent,
+  NodeTooltipContent,
 } from "react-apexsankey";
 ```
 
@@ -291,11 +220,15 @@ import ApexSankey, {
 
 This component is SSR-safe and renders an empty container on the server. The chart is only rendered client-side after hydration.
 
-## Browser Support
+## License
 
-- React 17+
-- Modern browsers (Chrome, Firefox, Safari, Edge)
+react-apexsankey uses the same dual-license model as ApexCharts. See [LICENSE](./LICENSE) for details.
+
+- **Free** for individuals, non-profits, and small businesses (< $2M revenue)
+- **Commercial license** required for larger organizations
 
 ## Links
 
-- [ApexSankey GitHub](https://github.com/nicnash/apexsankey)
+- [ApexSankey Documentation](https://github.com/apexcharts/apexsankey)
+- [ApexCharts](https://apexcharts.com)
+- [License Information](https://apexcharts.com/license)
