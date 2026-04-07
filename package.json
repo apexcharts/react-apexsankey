@@ -1,6 +1,6 @@
 {
   "name": "react-apexsankey",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "React wrapper for ApexSankey - A JavaScript library to create Sankey diagrams",
   "type": "module",
   "main": "./dist/react-apexsankey.cjs",
@@ -49,7 +49,7 @@
   "homepage": "https://github.com/apexcharts/react-apexsankey#readme",
   "peerDependencies": {
     "@svgdotjs/svg.js": ">=3.0.0",
-    "apexsankey": ">=1.0.0",
+    "apexsankey": ">=1.7.0",
     "react": ">=17.0.0",
     "react-dom": ">=17.0.0"
   },
