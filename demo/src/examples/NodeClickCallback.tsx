@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ApexSankey, { GraphData, SankeyOptions, Node } from "react-apexsankey";
+import ApexSankey, { GraphData, SankeyOptions, SankeyNode } from "react-apexsankey";
 
 const data: GraphData = {
   nodes: [
@@ -68,10 +68,10 @@ const data: GraphData = {
 };
 
 export default function NodeClickCallback() {
-  const [clickedNode, setClickedNode] = useState<Node | null>(null);
+  const [clickedNode, setClickedNode] = useState<SankeyNode | null>(null);
   const [clickHistory, setClickHistory] = useState<string[]>([]);
 
-  const handleNodeClick = (node: Node) => {
+  const handleNodeClick = (node: SankeyNode) => {
     setClickedNode(node);
     setClickHistory((prev) => [...prev.slice(-4), node.title]);
   };
@@ -84,7 +84,6 @@ export default function NodeClickCallback() {
     fontWeight: "500",
     edgeOpacity: 0.25,
     enableTooltip: true,
-    onNodeClick: handleNodeClick,
   };
 
   return (
@@ -97,7 +96,7 @@ export default function NodeClickCallback() {
         </p>
       </div>
       <div className="chart-wrapper">
-        <ApexSankey data={data} options={options} />
+        <ApexSankey data={data} options={options} onNodeClick={handleNodeClick} />
       </div>
       <div className="ref-demo">
         <strong>Last Clicked Node:</strong>
