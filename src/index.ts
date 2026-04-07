@@ -8,25 +8,20 @@ export { setApexSankeyLicense } from "./utils";
 // types
 export type {
   // data types
-  Node,
-  Edge,
+  SankeyNode,
+  SankeyEdge,
   GraphData,
   DataOptions,
-  
+
   // options types
   SankeyOptions,
-  CommonOptions,
-  NodeOptions,
-  EdgeOptions,
-  FontOptions,
-  TooltipOptions,
   TooltipContent,
-  
+
   // instance types
   SankeyGraph,
   ApexSankeyInstance,
   ApexSankeyConstructor,
-  
+
   // react types
   ApexSankeyRef,
   ApexSankeyProps,
