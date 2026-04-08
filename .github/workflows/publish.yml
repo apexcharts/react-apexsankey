@@ -56,7 +56,7 @@ jobs:
       - run: npm run build
 
       - name: Publish to npm
-        run: npm publish --provenance --tag ${{ steps.check.outputs.tag }}
+        run: npm publish --provenance --access public --tag ${{ steps.check.outputs.tag }}
 
       - name: Create git tag
         run: |
