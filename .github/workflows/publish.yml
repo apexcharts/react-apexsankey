@@ -12,6 +12,7 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment: npm
     if: startsWith(github.event.head_commit.message, 'release:')
 
     steps:
@@ -49,7 +50,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-          registry-url: "https://registry.npmjs.org"
 
       - run: npm install -g npm@latest
       - run: npm install
