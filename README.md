@@ -222,10 +222,11 @@ This component is SSR-safe and renders an empty container on the server. The cha
 
 ## License
 
-react-apexsankey uses the same dual-license model as ApexCharts. See [LICENSE](./LICENSE) for details.
+react-apexsankey bundles ApexSankey, which is included in the **Pro** plan and above. See [LICENSE](./LICENSE) for details.
 
-- **Free** for individuals, non-profits, and small businesses (< $2M revenue)
-- **Commercial license** required for larger organizations
+- **There is no free tier for ApexSankey.** The $2M threshold that makes some Apex products free does not apply to it: a Pro license is required whatever your financial resources, by companies, individuals, non-profits and educators alike.
+- Without a valid license key ApexSankey renders with a trial watermark, which is for evaluation only.
+- One license key works across every Apex product, so a customer of one does not buy a second for another.
 
 ## Links
 
