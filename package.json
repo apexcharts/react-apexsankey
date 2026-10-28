@@ -1,6 +1,6 @@
 {
   "name": "react-apexsankey",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React wrapper for ApexSankey - A JavaScript library to create Sankey diagrams",
   "type": "module",
   "main": "./dist/react-apexsankey.cjs",
