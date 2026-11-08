@@ -88,8 +88,13 @@ const ApexSankey = forwardRef<ApexSankeyRef, ApexSankeyProps>(function ApexSanke
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [options, onNodeClick !== undefined]);
 
-  // expose graph instance via ref
-  useImperativeHandle(ref, () => ({ graph }), [graph]);
+  // expose graph instance and refreshTokens via ref
+  useImperativeHandle(ref, () => ({
+    graph,
+    refreshTokens: () => {
+      instanceRef.current?.refreshTokens?.();
+    },
+  }), [graph]);
 
   // render chart when dependencies change
   useEffect(() => {
